@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품상세정보</title>
+    <!-- 부트스트랩 CSS 링크 추가 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- 부트스트랩 및 jQuery/Popper.js/Bootstrap JavaScript 라이브러리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="module">
+        // Firebase 세팅
+        // Firebase SDK 라이브러리 가져오기
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+
+        // Firebase 구성 정보 설정
+        const firebaseConfig = {
+
+       
+        };
+
+
+        // Firebase 인스턴스 초기화
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+    
+
+        // Firestore에서 해당 고유 ID를 가진 문서 가져오기
+        // doc는 문서에 대한 참조를 만들고
+        // getDoc는 해당 참조를 이용해 데이터를 가져옵니다
+        // 다른 페이지에서 스토리지에서 ID 값을 읽어옴
+        const dataId = localStorage.getItem("dataId");
+        const productRef = doc(db, "Product_info", dataId);
+        const docSnapshot = await getDoc(productRef);
+        const Order_data = docSnapshot.data();
+        $('#productImage').attr('src', Order_data.Product_image); // 이미지 속성 설정
+        $('#productTitle').text(Order_data.Product_name);
+        $('#productPrice').text(Order_data.Product_price + "원");
+        $('#productComment').text(Order_data.Product_comment);
+
+
+    </script>
+    <style>
+        /* 폰트설정 */
+        @import url('https://fonts.googleapis.com/css2?family=Orbit&display=swap');
+
+        * {
+            font-family: 'Orbit', sans-serif;
+        }
+
+        .product_page {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .product-image {
+            max-width: 50%; /* 이미지의 최대 너비를 50%로 설정하여 왼쪽 반만 사용 */
+    transition: transform 0.3s;
+    z-index: 2;
+    position: relative;
+    cursor: zoom-in;
+        }
+
+        .product_info {
+            margin-top: 20px;
+            align-items: center;
+
+        }
+
+        .title {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .product-image:hover {
+            transform: scale(1.2);
+            /* 호버 시 이미지를 1.2배로 확대 */
+            z-index: 2;
+            /* 다른 요소 위로 나타나도록 */
+            position: relative;
+            /* 상대 위치 설정 */
+            cursor: zoom-in;
+            /* 호버 시 커서를 돋보기 모양으로 변경 */
+        }
+
+        .Order_upload {
+            display: none;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            width: 800px;
+            margin: 30px auto 0px auto;
+            border: 1px solid gray;
+            padding: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="title">
+        <h1>Jun`s Market</h1>
+    </div>
+    <div class="container product_page">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <img src="" alt="상품 이미지" class="product-image" id="productImage">
+            </div>
+            <div class="col-md-6 text-left">
+                <h2 id="productTitle"></h2>
+                <div class="product_info">
+                    <p id="productPrice"></p>
+                    <div class="product_info">
+                        <p id="productComment"></p>
+                    </div>
+                </div>
+                <button id="Order_btn" class="btn btn-primary">주문하기</button>
+                <button id="Goback_list_btn" class="btn btn-secondary">뒤로가기</button>
+            </div>
+        </div>
+    </div>
+    <div id="Order_info_upload" class="Order_upload ">
+        <div id="Order_input_info" class="Order_list_add">
+
+            <div class="form-floating mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa fa-user">수령인</i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control" id="Order_info_name" placeholder="이름을 입력하시오">
+                </div>
+            </div>
+            <div class="form-floating mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa fa-user">주소</i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control" id="Order_info_adress" placeholder="주소를 입력하시오">
+                </div>
+            </div>
+            <div class="form-floating mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa fa-user">연락처</i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control" id="Order_info_number" placeholder="전화번호를 입력하시오">
+                </div>
+            </div>
+
+            <div class="text-center ">
+                <button type="submit" id="Order_info_save" class="btn Sign_up">-주문하기-</button>
+                <button type="submit" id="Order_info_close" class="btn Sign_up">-닫기-</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        $("#Goback_list_btn").click(function () {
+            // 다른 HTML 파일로 이동
+            window.history.back();
+        });
+        $("#Order_btn").click(async function () {
+            $("#Order_info_upload").toggle();
+        })
+        $("#Order_info_close").click(async function () {
+            $("#Order_info_upload").toggle();
+        })
+    </script>
+</body>
+
+</html>

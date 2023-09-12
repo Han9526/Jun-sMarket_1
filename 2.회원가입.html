@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>회원가입</title>
+    <!-- 부트스트랩 CSS 링크 추가 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- 부트스트랩 및 jQuery/Popper.js/Bootstrap JavaScript 라이브러리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--  -->
+    <script type="module">
+        // Firebase 세팅
+        // Firebase SDK 라이브러리 가져오기
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+
+        // Firebase 구성 정보 설정
+        const firebaseConfig = {
+          
+
+        };
+
+
+        // Firebase 인스턴스 초기화
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+
+        // Firebase 입력값 저장하기
+        $("#Sign_up_save").click(async function () {
+
+            let user_name = $('#user_name').val();
+            let user_id = $('#user_id').val();
+            let user_password = $('#user_password').val();
+
+            let Sign_up_data = {
+                'user_name': user_name,
+                'user_id': user_id,
+                'user_password': user_password
+            }
+            await addDoc(collection(db, "Member_info"), Sign_up_data);
+
+
+            // 회원가입 완료 메시지 모달 띄우기
+            $('#Welcome_Jun').modal('show');
+        })
+
+    </script>
+    <style>
+        /* 폰트설정 */
+        @import url('https://fonts.googleapis.com/css2?family=Orbit&display=swap');
+
+        * {
+            font-family: 'Orbit', sans-serif;
+        }
+
+        /* "뒤로가기" 버튼  */
+        .back_login_btn {
+            background-color: transparent;
+            color: gray;
+            border: none;
+            margin-top: 10px;
+            width: 150px;
+        }
+
+        .Sign_up_btn {
+            margin-top: 10px;
+            width: 150px;
+        }
+
+        .Sign_up_title {
+
+
+            text-align: center;
+         
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Sign_up_title">
+        <h1>Jun`s Market</h1>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 ">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h2 class="text-center">회원가입</h2>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-user">이름</i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" id="user_name" placeholder="이름을 입력하시오">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-user">ID</i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" id="user_id" placeholder="아이디를 입력하시오">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-lock">PW</i>
+                                        </span>
+                                    </div>
+                                    <input type="password" class="form-control" id="user_password"
+                                        placeholder="비밀번호를 입력하시오">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button id="Sign_up_save" type="button"
+                                    class="btn btn-secondary Sign_up_btn">가입하기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- "뒤로가기" 버튼에 클래스 적용 -->
+        <div class="text-center">
+            <button type="submit" class="btn back_login_btn">뒤로가기</button>
+        </div>
+    </div>
+
+    <!-- 환영 메시지 모달 -->
+    <div class="modal fade" id="Welcome_Jun" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <!-- 모달 창을 정의하는 <div> 요소입니다. 
+             Welcome_Jun이라는 고유한 ID를 가지고 있으며, 화면에서 보이지 않게 숨겨진 상태로 시작됩니다. 
+            모달 창은 다이얼로그 역할을 하며, aria-labelledby 및 aria-hidden 속성이 설정되어 있습니다. -->
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="exampleModalLabel">Jun`s Market에 온걸 환영합니다!</h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                        <span aria-hidden="true">&times;</span>
+
+                    </button>
+                </div>
+                <div class="modal-footer">
+
+                    <button id="Welcome_Jun_btn" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">확인</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            // 뒤로가기 버튼 
+            $(".back_login_btn").click(function () {
+                // 다른 HTML 파일로 이동
+                window.location.href = "1.로그인.html";
+            });
+        });
+        $(document).ready(function () {
+            // 가입하기 버튼 
+            $("#Welcome_Jun_btn").click(function () {
+
+                window.location.href = "1.로그인.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

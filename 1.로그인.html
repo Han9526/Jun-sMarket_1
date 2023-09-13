@@ -21,7 +21,13 @@
 
         // Firebase 구성 정보 설정
         const firebaseConfig = {
-           
+            apiKey: "AIzaSyAPpl553tCFeatzs9KRgixjK2T-pPQe17w",
+  authDomain: "exfb-dc74d.firebaseapp.com",
+  projectId: "exfb-dc74d",
+  storageBucket: "exfb-dc74d.appspot.com",
+  messagingSenderId: "993747741943",
+  appId: "1:993747741943:web:ec89a297800ed186ba37f2",
+  measurementId: "G-XSL3WDNNW4"
         };
 
 
@@ -34,7 +40,6 @@
         $(document).ready(function () {
             // 로그인 버튼 클릭 이벤트 핸들러
             $(".login_btn").click(async function () {
-
                 // 사용자가 입력한 아이디와 비밀번호 가져오기
                 const login_Id = $("#login_id").val();
                 const login_Password = $("#login_password").val();
@@ -42,21 +47,25 @@
                 // Firebase에서 사용자 데이터 가져오기
                 const Login_data = await getDocs(collection(db, "Member_info"));
 
-                // 로그인 성공 여부
-                let loginSuccess = false; 
-                
+                let loginSuccess = false; // 로그인 성공 여부를 나타내는 변수
+                let loginDataId;
+
                 // 사용자 데이터와 비교
                 Login_data.forEach((doc) => {
                     const userData = doc.data();
                     if (userData.user_id === login_Id && userData.user_password === login_Password) {
-                       
+                        // 로그인 성공
                         loginSuccess = true;
+                        loginDataId = doc.id;
                     }
                 });
 
                 if (loginSuccess) {
+                    // 로그인 성공
+                    localStorage.setItem("login_DataId", loginDataId);
                     window.location.href = "3.상품목록.html";
                 } else {
+                    // 로그인 실패 알림을 한 번만 표시
                     alert("아이디 또는 비밀번호가 올바르지 않습니다.");
                 }
             });
@@ -71,10 +80,10 @@
         });
 
         $(document).ready(function () {
-            // 로그인 버튼 클릭 
+            // 로그인 버튼 클릭 이벤트 핸들러
             $(".Sign_up_btn").click(function () {
                 // 다른 HTML 파일로 이동
-                window.location.href = "2.회원가입.html"; 
+                window.location.href = "2.회원가입.html"; // 이동하고자 하는 HTML 파일의 경로를 지정하세요.
             });
         });
     </script>
@@ -86,27 +95,35 @@
             font-family: 'Orbit', sans-serif;
         }
 
-        /* 로그인 화면 전체 배경  */
+        /* 로그인 화면 전체 배경 스타일 */
         body {
             background-color: #f5f5f5;
+            /* 연한 회색 배경색 */
             color: #333;
+            /* 어울릴만한 글자색 */
         }
 
-        /* 로그인 화면 상단  */
+        /* 로그인 화면 상단 스타일 */
         .top-bar {
             background-color: #333;
+            /* 배경색 */
             color: #fff;
+            /* 글자색 */
             padding: 10px 0;
+            /* 위아래 여백 */
             text-align: center;
+            /* 가운데 정렬 */
         }
 
-        /* 로그인 버튼  */
+        /* 로그인 버튼 스타일 수정 */
         .login_btn {
             margin-top: 10px;
             width: 150px;
         }
 
-        /* "회원가입" 버튼 */
+
+
+        /* "회원가입" 버튼 스타일 수정 */
         .Sign_up_btn {
             background-color: transparent;
             color: gray;
@@ -121,7 +138,10 @@
         }
 
         .login_title {
+
+
             text-align: center;
+            /* 가로로 가운데 정렬 */
             margin-top: 50px;
         }
     </style>
@@ -174,6 +194,10 @@
             <button type="submit" class="btn Sign_up_btn">-회원가입-</button>
         </div>
     </div>
+    <script>
+
+
+    </script>
 </body>
 
 </html>

@@ -20,6 +20,13 @@
 
         // Firebase 구성 정보 설정
         const firebaseConfig = {
+            apiKey: "AIzaSyAPpl553tCFeatzs9KRgixjK2T-pPQe17w",
+  authDomain: "exfb-dc74d.firebaseapp.com",
+  projectId: "exfb-dc74d",
+  storageBucket: "exfb-dc74d.appspot.com",
+  messagingSenderId: "993747741943",
+  appId: "1:993747741943:web:ec89a297800ed186ba37f2",
+  measurementId: "G-XSL3WDNNW4"
 
           
         };
@@ -89,6 +96,9 @@
         $("#Product_info_close").click(async function () {
             $("#Product_card").toggle();
         })
+        $("#Order_history_btn").click(async function () {
+            $("#Order_history_list").toggle();
+        })
         $("#Goback_login_btn").click(function () {
             // 브라우저의 이전 페이지로 이동
             window.history.back();
@@ -98,17 +108,17 @@
 
         // 카드 생성 및 클릭 이벤트 처리
         Product_Read.forEach((doc) => {
-            const data = doc.data(); // Firestore 문서의 데이터를 가져옴
+            const Product_data = doc.data(); // Firestore 문서의 데이터를 가져옴
             let cardHtml = `
-                <div class="col-md-3 mb-4">
-                    <div class="card" data-id="${doc.id}">
+            <div class="col-md-3 mb-4">
+    <div class="card" data-product_id="${doc.id}">
                         <div class="card-img-container">
-                            <img src="${data.Product_image}" class="card-img-top" alt="카드 이미지">
+                            <img src="${Product_data.Product_image}" class="card-img-top" alt="카드 이미지">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title mb-4">${data.Product_name}</h5>
-                            <h6 class="card-subtitle mb-4">가격: ${data.Product_price}원</h6>
-                            <h6 class="card-subtitle mb-4">설명: ${data.Product_comment}</h6>
+                            <h5 class="card-title mb-4">${Product_data.Product_name}</h5>
+                            <h6 class="card-subtitle mb-4">가격: ${Product_data.Product_price}원</h6>
+                            <h6 class="card-subtitle mb-4">설명: ${Product_data.Product_comment}</h6>
                         </div>
                     </div>
                 </div>
@@ -119,16 +129,14 @@
 
         });
 
-        //카드 클릭 이벤트
-        $(".card").click(function () {
-        // 클릭 이벤트 핸들러에서 ID 값을 스토리지에 저장
-            const dataId = $(this).data("id");
-            localStorage.setItem("dataId", dataId);
-            window.location.href = "4.상품페이지.html";
-
-        });
-
-
+// 상위 요소를 선택하고 클릭 이벤트를 처리
+$(".card").click(function () {
+    // 클릭한 카드의 데이터 ID를 가져옴
+    const ProductogId = $(this).data("product_id");
+    localStorage.setItem("Product_Data_ID", ProductogId);
+    console.log(ProductogId);
+});
+ 
 
 
     </script>
@@ -253,6 +261,7 @@
         <div class="text-center">
             <button id="Product_info_open_btn" type="submit" class="btn Sign_up">-상품등록하기-</button>
             <button id="Goback_login_btn" type="submit" class="btn Sign_up">-뒤로가기-</button>
+            <button id="Order_history_btn" type="submit" class="btn Sign_up">-주문내역-</button>
         </div>
         <div id="Product_card" class="card_add">
             <div class="form-floating mb-2">
@@ -278,10 +287,42 @@
                 <input type="text" class="form-control" id="Product_comment" placeholder="설명을 입력하시오"
                     style="width: 400px;">
             </div>
-
             <div class="text-center">
                 <button type="submit" id="Product_info_save" class="btn Sign_up">-등록하기-</button>
                 <button type="submit" id="Product_info_close" class="btn Sign_up">-닫기-</button>
+            </div>
+        </div>
+        <!-- 주문내역 테이블 -->
+        <div id="Order_history_list" class="Order_history_table" style="display: none;">
+            <div class="container">
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>주문번호</th>
+                            <th>상품명</th>
+                            <th>주문한ID</th>
+                            <th>수령인</th>
+                            <th>주소</th>
+                            <th>연락처</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>23213123</td>
+                            <td>아무개</td>
+                            <td>서울시</td>
+                            <td>01025554244</td>
+                        </tr>
+                        <tr>
+                            <td>123123123</td>
+                            <td>임우개</td>
+                            <td>부산시</td>
+                            <td>01023232323</td>
+                        </tr>
+                   
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

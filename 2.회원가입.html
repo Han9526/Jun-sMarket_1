@@ -21,7 +21,13 @@
 
         // Firebase 구성 정보 설정
         const firebaseConfig = {
-          
+            apiKey: "AIzaSyAPpl553tCFeatzs9KRgixjK2T-pPQe17w",
+  authDomain: "exfb-dc74d.firebaseapp.com",
+  projectId: "exfb-dc74d",
+  storageBucket: "exfb-dc74d.appspot.com",
+  messagingSenderId: "993747741943",
+  appId: "1:993747741943:web:ec89a297800ed186ba37f2",
+  measurementId: "G-XSL3WDNNW4"
 
         };
 
@@ -59,7 +65,7 @@
             font-family: 'Orbit', sans-serif;
         }
 
-        /* "뒤로가기" 버튼  */
+        /* "뒤로가기" 버튼 스타일 수정 */
         .back_login_btn {
             background-color: transparent;
             color: gray;
@@ -77,7 +83,7 @@
 
 
             text-align: center;
-         
+            /* 가로로 가운데 정렬 */
             margin-top: 50px;
         }
     </style>
@@ -145,9 +151,8 @@
     <!-- 환영 메시지 모달 -->
     <div class="modal fade" id="Welcome_Jun" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <!-- 모달 창을 정의하는 <div> 요소입니다. 
-             Welcome_Jun이라는 고유한 ID를 가지고 있으며, 화면에서 보이지 않게 숨겨진 상태로 시작됩니다. 
-            모달 창은 다이얼로그 역할을 하며, aria-labelledby 및 aria-hidden 속성이 설정되어 있습니다. -->
+        <!-- 모달 창을 정의하는 <div> 요소입니다. Welcome_Jun이라는 고유한 ID를 가지고 있으며, 화면에서 보이지 않게 숨겨진 상태로 시작됩니다. 
+     모달 창은 다이얼로그 역할을 하며, aria-labelledby 및 aria-hidden 속성이 설정되어 있습니다. -->
         <div class="modal-dialog" role="document">
 
             <div class="modal-content">
@@ -173,17 +178,17 @@
     </div>
     <script>
         $(document).ready(function () {
-            // 뒤로가기 버튼 
+            // 로그인 버튼 클릭 이벤트 핸들러
             $(".back_login_btn").click(function () {
                 // 다른 HTML 파일로 이동
-                window.location.href = "1.로그인.html";
+                window.location.href = "1.로그인.html"; // 이동하고자 하는 HTML 파일의 경로를 지정하세요.
             });
         });
         $(document).ready(function () {
-            // 가입하기 버튼 
+            // 로그인 버튼 클릭 이벤트 핸들러
             $("#Welcome_Jun_btn").click(function () {
-
-                window.location.href = "1.로그인.html";
+                // 다른 HTML 파일로 이동
+                window.location.href = "1.로그인.html"; // 이동하고자 하는 HTML 파일의 경로를 지정하세요.
             });
         });
     </script>

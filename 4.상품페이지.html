@@ -23,7 +23,14 @@
         // Firebase 구성 정보 설정
         const firebaseConfig = {
 
-       
+            apiKey: "AIzaSyAPpl553tCFeatzs9KRgixjK2T-pPQe17w",
+  authDomain: "exfb-dc74d.firebaseapp.com",
+  projectId: "exfb-dc74d",
+  storageBucket: "exfb-dc74d.appspot.com",
+  messagingSenderId: "993747741943",
+  appId: "1:993747741943:web:ec89a297800ed186ba37f2",
+  measurementId: "G-XSL3WDNNW4"
+
         };
 
 
@@ -36,14 +43,36 @@
         // doc는 문서에 대한 참조를 만들고
         // getDoc는 해당 참조를 이용해 데이터를 가져옵니다
         // 다른 페이지에서 스토리지에서 ID 값을 읽어옴
-        const dataId = localStorage.getItem("dataId");
-        const productRef = doc(db, "Product_info", dataId);
+        const OrderId = localStorage.getItem("Product_Data_ID");
+        const productRef = doc(db, "Product_info", OrderId);
         const docSnapshot = await getDoc(productRef);
         const Order_data = docSnapshot.data();
-        $('#productImage').attr('src', Order_data.Product_image); // 이미지 속성 설정
-        $('#productTitle').text(Order_data.Product_name);
-        $('#productPrice').text(Order_data.Product_price + "원");
-        $('#productComment').text(Order_data.Product_comment);
+       console.log(Order_data);
+
+        //주문하기 버튼 클릭이벤트
+        $('#Order_info_save').click(async function(){
+            let Order_receive_name = $('#Order_info_name').val();
+            
+            let Order_receive_adress = $('#Order_info_adress').val();
+            
+            let Order_receive_phone = $('#Order_info_phone').val();
+
+            let Order_receive_data = {
+                'Order_info_name': Order_receive_name,
+                'Order_info_adress': Order_receive_adress,
+                'Order_info_phone': Order_receive_phone,
+                'Order_info_dataId': OrderId
+            }
+            await addDoc(collection(db, "Order_receive_info"), Order_receive_data);
+
+
+            $('#Order_receive_clear').modal('show');
+
+        }
+        );
+        
+
+      
 
 
     </script>
@@ -121,7 +150,7 @@
                         <p id="productComment"></p>
                     </div>
                 </div>
-                <button id="Order_btn" class="btn btn-primary">주문하기</button>
+                <button id="Order_btn" class="btn btn-primary">주문작성하기</button>
                 <button id="Goback_list_btn" class="btn btn-secondary">뒤로가기</button>
             </div>
         </div>
@@ -156,7 +185,7 @@
                             <i class="fa fa-user">연락처</i>
                         </span>
                     </div>
-                    <input type="text" class="form-control" id="Order_info_number" placeholder="전화번호를 입력하시오">
+                    <input type="text" class="form-control" id="Order_info_phone" placeholder="전화번호를 입력하시오">
                 </div>
             </div>
 
@@ -167,6 +196,35 @@
         </div>
     </div>
     </div>
+
+    <div class="modal fade" id="Order_receive_clear" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <!-- 모달 창을 정의하는 <div> 요소입니다. Welcome_Jun이라는 고유한 ID를 가지고 있으며, 화면에서 보이지 않게 숨겨진 상태로 시작됩니다. 
+ 모달 창은 다이얼로그 역할을 하며, aria-labelledby 및 aria-hidden 속성이 설정되어 있습니다. -->
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">주문완료!</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+            </div>
+            <div class="modal-footer">
+
+                <button id="Order_receive_clear_btn" type="button" class="btn btn-secondary"
+                    data-dismiss="modal">확인</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <script>
         $("#Goback_list_btn").click(function () {
@@ -179,6 +237,10 @@
         $("#Order_info_close").click(async function () {
             $("#Order_info_upload").toggle();
         })
+        $("#Order_receive_clear_btn").click(function () {
+            
+            window.location.reload();
+        });
     </script>
 </body>
 

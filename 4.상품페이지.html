@@ -23,7 +23,14 @@
         // Firebase 구성 정보 설정
         const firebaseConfig = {
 
-     
+            apiKey: "AIzaSyAPpl553tCFeatzs9KRgixjK2T-pPQe17w",
+  authDomain: "exfb-dc74d.firebaseapp.com",
+  projectId: "exfb-dc74d",
+  storageBucket: "exfb-dc74d.appspot.com",
+  messagingSenderId: "993747741943",
+  appId: "1:993747741943:web:ec89a297800ed186ba37f2",
+  measurementId: "G-XSL3WDNNW4"
+
         };
 
 
@@ -38,11 +45,19 @@
         // 다른 페이지에서 스토리지에서 ID 값을 읽어옴
         const OrderId = localStorage.getItem("Product_Data_ID");
         const productRef = doc(db, "Product_info", OrderId);
-        const docSnapshot = await getDoc(productRef);
-        const Order_data = docSnapshot.data();
-       console.log(Order_data);
+        const Product_docSnapshot = await getDoc(productRef);
+        const Order_data = Product_docSnapshot.data();
 
-        //주문하기 버튼 클릭이벤트
+
+        const loginDataId = localStorage.getItem("login_DataId");
+        const loginRef = doc(db, "Member_info", loginDataId);
+        const login_docSnapshot = await getDoc(loginRef);
+        const login_data = login_docSnapshot.data();
+        
+        $('#productImage').attr('src', Order_data.Product_image); // 이미지 속성 설정
+        $('#productTitle').text(Order_data.Product_name);
+        $('#productPrice').text(Order_data.Product_price + "원");
+        $('#productComment').text(Order_data.Product_comment);
         $('#Order_info_save').click(async function(){
             let Order_receive_name = $('#Order_info_name').val();
             
@@ -54,7 +69,9 @@
                 'Order_info_name': Order_receive_name,
                 'Order_info_adress': Order_receive_adress,
                 'Order_info_phone': Order_receive_phone,
-                'Order_info_dataId': OrderId
+                'Order_info_dataId': Order_data.Product_name,
+                'Order_info_login_name': login_data.user_id,
+                'Order_info_loginId' :loginDataId
             }
             await addDoc(collection(db, "Order_receive_info"), Order_receive_data);
 

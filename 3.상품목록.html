@@ -20,9 +20,15 @@
 
         // Firebase 구성 정보 설정
         const firebaseConfig = {
-       
+            apiKey: "AIzaSyAPpl553tCFeatzs9KRgixjK2T-pPQe17w",
+            authDomain: "exfb-dc74d.firebaseapp.com",
+            projectId: "exfb-dc74d",
+            storageBucket: "exfb-dc74d.appspot.com",
+            messagingSenderId: "993747741943",
+            appId: "1:993747741943:web:ec89a297800ed186ba37f2",
+            measurementId: "G-XSL3WDNNW4"
 
-          
+
         };
 
 
@@ -57,8 +63,8 @@
             }
             try {
                 await addDoc(collection(db, "Product_info"), Product_info_data);
-                alert("상품등록이 완료됬습니다"); // Show success alert
-                window.location.reload(); // 새로고침
+                $('#Sign_up_modal').modal('show'); // Show success alert
+                
             } catch (error) {
                 console.error("Error adding product info:", error);
                 alert("상품등록에 실패했습니다"); // Show error alert
@@ -105,7 +111,7 @@
             const Product_data = doc.data(); // Firestore 문서의 데이터를 가져옴
             let cardHtml = `
             <div class="col-md-3 mb-4">
-    <div class="card" data-product_id="${doc.id}">
+                <div class="card" data-product_id="${doc.id}">
                         <div class="card-img-container">
                             <img src="${Product_data.Product_image}" class="card-img-top" alt="카드 이미지">
                         </div>
@@ -123,14 +129,42 @@
 
         });
 
-// 상위 요소를 선택하고 클릭 이벤트를 처리
-$(".card").click(function () {
-    // 클릭한 카드의 데이터 ID를 가져옴
-    const ProductogId = $(this).data("product_id");
-    localStorage.setItem("Product_Data_ID", ProductogId);
-    console.log(ProductogId);
-});
- 
+        // 상위 요소를 선택하고 클릭 이벤트를 처리
+        $(".card").click(function () {
+            // 클릭한 카드의 데이터 ID를 가져옴
+            const ProductogId = $(this).data("product_id");
+            localStorage.setItem("Product_Data_ID", ProductogId);
+            window.location.href = "4.상품페이지.html";
+        });
+
+        // 로그인한 사용자 데이터의 고유 ID 가져오기
+        const loginDataId = localStorage.getItem("login_DataId");
+
+        // 주문내역 리스트 추가 
+        // 주문한 아이디는 위에 로그인 사용자데이터 고유 id Member_info
+        // 상품명은 클릭한 카드의 Order_receive_info  Order_info_dataId <문서 고유id  그것의 상품명
+        // 수령인 주소 연락처 는 클릭한 카드안에서의 Order_receive_info 
+        let Order_info_Read = await getDocs(collection(db, "Order_receive_info"));
+
+
+
+        Order_info_Read.forEach((doc) => {
+            const Order_list_data = doc.data(); // Firestore 문서의 데이터를 가져옴
+
+            // 로그인 사용자의 고유 ID와 주문 정보의 사용자 ID를 비교
+            if (loginDataId === Order_list_data.Order_info_loginId) {
+                let Order_list_html = `
+            <tr>
+                <td>${Order_list_data.Order_info_login_name}</td>
+                <td>${Order_list_data.Order_info_dataId}</td>
+                <td>${Order_list_data.Order_info_name}</td>
+                <td>${Order_list_data.Order_info_adress}</td>
+                <td>${Order_list_data.Order_info_phone}</td>
+            </tr>`;
+
+                $('#Order_list_add_data').append(Order_list_html);
+            }
+        });
 
 
     </script>
@@ -289,32 +323,19 @@ $(".card").click(function () {
         <!-- 주문내역 테이블 -->
         <div id="Order_history_list" class="Order_history_table" style="display: none;">
             <div class="container">
-                
+
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>주문번호</th>
-                            <th>상품명</th>
                             <th>주문한ID</th>
+                            <th>상품명</th>
                             <th>수령인</th>
                             <th>주소</th>
                             <th>연락처</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>23213123</td>
-                            <td>아무개</td>
-                            <td>서울시</td>
-                            <td>01025554244</td>
-                        </tr>
-                        <tr>
-                            <td>123123123</td>
-                            <td>임우개</td>
-                            <td>부산시</td>
-                            <td>01023232323</td>
-                        </tr>
-                   
+                    <tbody id="Order_list_add_data">
+                  
                     </tbody>
                 </table>
             </div>
@@ -339,8 +360,41 @@ $(".card").click(function () {
                 </div>
             </div>
         </div>
-        <script>
 
+          <!-- 환영 메시지 모달 -->
+    <div class="modal fade" id="Sign_up_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+ 
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">상품 등록이 완료됬습니다</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+            </div>
+            <div class="modal-footer">
+
+                <button id="Sign_up_modal_btn" type="button" class="btn btn-secondary"
+                    data-dismiss="modal">확인</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <script>
+  $("#Sign_up_modal_btn").click(function () {
+                // 다른 HTML 파일로 이동
+                window.location.reload(); // 새로고침
+            });
         </script>
 </body>
 
